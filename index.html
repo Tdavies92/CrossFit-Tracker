@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>CrossFit 2027 | Well-Rounded Athlete</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0c0c0f;--surface:#141418;--card:#1a1a20;--border:#262630;--border2:#32323e;--muted:#6a6a88;--light:#9898b8;--text:#e8e8f0;--white:#f4f4f8;--yellow:#e8ff47;--orange:#ff6b35;--blue:#4fc3f7;--green:#4fffb0;--red:#ff4d6d;--purple:#b57bee;--teal:#26d7c4;}
+*{box-sizing:border-box;margin:0;padding:0;}html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;font-size:15px;-webkit-font-smoothing:antialiased;min-height:100dvh;padding-bottom:80px;}
+.app-header{background:var(--surface);border-bottom:1px solid var(--border);padding:14px 18px 0;position:sticky;top:0;z-index:200;}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding-bottom:10px;}
+.app-title{font-family:'Barlow Condensed',sans-serif;font-size:21px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--white);}
+.app-title span{color:var(--yellow);}
+.header-meta{font-family:'DM Mono',monospace;font-size:9px;color:var(--light);letter-spacing:.1em;text-align:right;line-height:1.6;}
+.tab-bar{display:flex;overflow-x:auto;scrollbar-width:none;margin:0 -18px;padding:0 18px;}
+.tab-bar::-webkit-scrollbar{display:none;}
+.tab-btn{flex-shrink:0;padding:9px 15px 11px;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;transition:color .18s,border-color .18s;white-space:nowrap;}
+.tab-btn:hover{color:var(--light);}.tab-btn.active{color:var(--yellow);border-bottom-color:var(--yellow);}
+.tab-pane{display:none;}.tab-pane.active{display:block;}
+.page{padding:18px 15px;max-width:720px;margin:0 auto;}
+.countdown-hero{background:linear-gradient(135deg,var(--surface) 0%,#1a1a28 100%);border:1px solid var(--border);border-radius:14px;padding:22px 18px;text-align:center;margin-bottom:14px;position:relative;overflow:hidden;}
+.countdown-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(232,255,71,.06) 0%,transparent 70%);pointer-events:none;}
+.cd-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--yellow);text-transform:uppercase;margin-bottom:6px;}
+.cd-number{font-family:'Barlow Condensed',sans-serif;font-size:clamp(60px,16vw,96px);font-weight:800;color:var(--yellow);line-height:1;letter-spacing:-.02em;}
+.cd-unit{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:600;color:#c8c8d8;letter-spacing:.1em;text-transform:uppercase;margin-top:3px;margin-bottom:10px;}
+.cd-date{font-family:'DM Mono',monospace;font-size:10px;color:var(--light);letter-spacing:.08em;}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:11px 6px;text-align:center;}
+.stat-val{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:800;color:var(--yellow);line-height:1;}
+.stat-lbl{font-family:'DM Mono',monospace;font-size:8px;color:#8888a8;letter-spacing:.08em;text-transform:uppercase;margin-top:3px;}
+.spider-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 14px;margin-bottom:14px;}
+.spider-title{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:700;letter-spacing:.05em;color:var(--white);margin-bottom:2px;}
+.spider-sub{font-family:'DM Mono',monospace;font-size:9px;color:var(--light);letter-spacing:.08em;margin-bottom:14px;}
+.spider-wrap{display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+.spider-legend{flex:1 1 120px;display:flex;flex-direction:column;gap:8px;}
+.legend-item{display:flex;align-items:center;gap:7px;}
+.legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.legend-text{flex:1;}
+.legend-label{font-family:'DM Mono',monospace;font-size:9px;color:var(--light);letter-spacing:.06em;}
+.legend-sub{font-family:'DM Mono',monospace;font-size:8px;color:var(--muted);}
+.legend-val{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;margin-left:auto;flex-shrink:0;}
+.phase-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:14px;}
+.phase-title{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:700;letter-spacing:.05em;color:var(--white);}
+.phase-badge{font-family:'DM Mono',monospace;font-size:9px;padding:2px 7px;border-radius:20px;background:rgba(232,255,71,.1);border:1px solid rgba(232,255,71,.3);color:var(--yellow);letter-spacing:.08em;}
+.bar-track{background:var(--border);border-radius:6px;height:7px;overflow:hidden;margin-bottom:5px;}
+.bar-fill{height:100%;border-radius:6px;background:var(--yellow);transition:width .8s ease;}
+.bar-meta{display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:9px;color:var(--light);}
+.this-week-card{background:var(--card);border:1px solid var(--border);border-left:3px solid var(--yellow);border-radius:12px;padding:14px;margin-bottom:14px;cursor:pointer;transition:border-color .2s;}
+.this-week-card:hover{border-left-color:var(--orange);}
+.tw-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.tw-title{font-family:'Barlow Condensed',sans-serif;font-size:19px;font-weight:700;letter-spacing:.05em;}
+.tw-tag{font-family:'DM Mono',monospace;font-size:9px;color:var(--light);letter-spacing:.1em;text-transform:uppercase;}
+.goto-link{font-family:'DM Mono',monospace;font-size:10px;color:var(--yellow);letter-spacing:.1em;}
+.day-pills{display:flex;gap:5px;flex-wrap:wrap;}
+.day-pill{font-family:'DM Mono',monospace;font-size:9px;padding:3px 9px;border-radius:5px;border:1px solid var(--border);color:var(--muted);letter-spacing:.06em;}
+.day-pill.done{background:rgba(79,255,176,.1);border-color:rgba(79,255,176,.3);color:var(--green);}
+.day-pill.missed{background:rgba(255,77,109,.08);border-color:rgba(255,77,109,.25);color:var(--red);text-decoration:line-through;}
+.block-header{margin-bottom:14px;}
+.block-header h2{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:800;letter-spacing:.05em;color:var(--white);}
+.block-header p{font-family:'DM Mono',monospace;font-size:9px;color:var(--light);margin-top:3px;}
+.export-block-btn{width:100%;padding:11px;background:transparent;border:1px solid rgba(79,195,247,.4);border-radius:8px;color:var(--blue);font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.08em;cursor:pointer;margin-bottom:14px;}
+.export-block-btn:hover{background:rgba(79,195,247,.08);}
+.week-block{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px;}
+.week-block.current-week{border-color:var(--yellow);}
+.week-head{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:var(--surface);border-bottom:1px solid var(--border);cursor:pointer;user-select:none;gap:8px;}
+.wk-num{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;color:var(--yellow);letter-spacing:.05em;min-width:44px;}
+.wk-focus{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:.04em;color:var(--white);line-height:1.1;}
+.wk-sub{font-family:'DM Mono',monospace;font-size:9px;color:#9898b8;letter-spacing:.08em;text-transform:uppercase;margin-top:2px;}
+.wk-prog-bar{width:48px;height:4px;background:var(--border);border-radius:3px;overflow:hidden;}
+.wk-prog-fill{height:100%;background:var(--yellow);border-radius:3px;transition:width .5s;}
+.wk-prog-fill.full{background:var(--green);}
+.wk-prog-text{font-family:'DM Mono',monospace;font-size:9px;color:var(--light);margin-top:2px;}
+.chevron{color:var(--muted);font-size:15px;transition:transform .2s;flex-shrink:0;}
+.chevron.open{transform:rotate(180deg);}
+.week-body{display:none;padding:10px 14px 14px;}
+.week-body.open{display:block;}
+.current-week-badge{font-family:'DM Mono',monospace;font-size:8px;padding:1px 6px;border-radius:10px;background:rgba(232,255,71,.15);border:1px solid rgba(232,255,71,.4);color:var(--yellow);letter-spacing:.08em;}
+.deload-banner{background:rgba(232,255,71,.05);border:1px solid rgba(232,255,71,.2);border-radius:8px;padding:9px 11px;margin-bottom:9px;font-size:12px;color:var(--light);}
+.day-row{border:1px solid var(--border);border-left:3px solid var(--border2);border-radius:8px;margin-bottom:7px;overflow:hidden;transition:border-left-color .2s;}
+.day-row.done-row{border-left-color:var(--green);}
+.day-row.missed-row{border-left-color:var(--red);opacity:.65;}
+.day-row-head{display:flex;align-items:center;padding:9px 11px;gap:8px;cursor:pointer;user-select:none;}
+.day-label{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.05em;color:var(--white);flex:1;line-height:1.25;}
+.day-type-tag{font-family:'DM Mono',monospace;font-size:9px;padding:2px 6px;border-radius:4px;letter-spacing:.06em;text-transform:uppercase;flex-shrink:0;}
+.tag-class{background:rgba(79,195,247,.12);color:var(--blue);border:1px solid rgba(79,195,247,.3);}
+.tag-opengym{background:rgba(181,123,238,.15);color:var(--purple);border:1px solid rgba(181,123,238,.3);}
+.tag-aerobic{background:rgba(79,255,176,.12);color:var(--green);border:1px solid rgba(79,255,176,.3);}
+.tag-retest{background:rgba(255,77,109,.12);color:var(--red);border:1px solid rgba(255,77,109,.3);}
+.tag-deload{background:rgba(232,255,71,.1);color:var(--yellow);border:1px solid rgba(232,255,71,.3);}
+.status-btns{display:flex;gap:4px;}
+.status-btn{width:27px;height:27px;border-radius:6px;border:1px solid var(--border);background:var(--surface);font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s,border-color .15s,transform .1s;flex-shrink:0;}
+.status-btn:active{transform:scale(.9);}
+.status-btn.done-btn.active{background:rgba(79,255,176,.2);border-color:var(--green);}
+.status-btn.miss-btn.active{background:rgba(255,77,109,.15);border-color:var(--red);}
+.rpe-line{font-family:'DM Mono',monospace;font-size:9px;padding:3px 11px 6px;color:var(--light);display:block;}
+.ri{display:inline;margin-right:10px;}
+.ri-n{font-weight:600;}
+.ri-easy .ri-n{color:#6ee7b7;}.ri-mod .ri-n{color:#fde047;}.ri-hard .ri-n{color:#fb923c;}.ri-max .ri-n{color:#f87171;}
+.day-detail{display:none;padding:0 11px 11px;border-top:1px dashed var(--border);}
+.day-detail.open{display:block;}
+.workout-block{background:var(--bg);border-radius:8px;padding:11px 13px;margin-top:9px;font-size:13px;color:#bbbdd0;line-height:1.8;}
+.wb-title{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;letter-spacing:.05em;color:var(--white);margin-bottom:5px;}
+.wb-s{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;margin-top:10px;margin-bottom:4px;font-weight:600;}
+.wb-s.oly{color:var(--orange);}.wb-s.gym{color:var(--blue);}.wb-s.met{color:var(--teal);}.wb-s.grn{color:var(--green);}
+.wb-note{font-family:'DM Mono',monospace;font-size:10px;color:var(--light);margin-top:8px;padding-top:8px;border-top:1px dashed var(--border2);letter-spacing:.04em;}
+.notes-wrap{margin-top:9px;}
+.notes-label{font-family:'DM Mono',monospace;font-size:10px;color:var(--light);letter-spacing:.08em;margin-bottom:3px;display:block;}
+.session-notes{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:7px 10px;color:var(--text);font-family:'Barlow',sans-serif;font-size:13px;min-height:58px;resize:vertical;outline:none;transition:border-color .2s;}
+.session-notes:focus{border-color:var(--yellow);}
+.save-note-btn{margin-top:5px;padding:5px 13px;background:var(--yellow);color:var(--bg);font-family:'DM Mono',monospace;font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;border:none;border-radius:5px;cursor:pointer;}
+.bm-section-title{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:700;letter-spacing:.06em;color:var(--white);margin:18px 0 9px;padding-bottom:5px;border-bottom:1px solid var(--border);}
+.bm-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:14px;}
+@media(max-width:460px){.bm-grid{grid-template-columns:1fr;}}
+.bm-card{background:var(--card);border:1px solid var(--border2);border-radius:10px;padding:13px;}
+.bm-name{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--light);margin-bottom:4px;}
+.bm-target{font-family:'DM Mono',monospace;font-size:9px;color:var(--light);margin-bottom:7px;}
+.bm-target span{color:var(--yellow);font-weight:600;}
+.bm-input{width:100%;background:var(--surface);border:1px solid var(--border2);border-radius:5px;padding:7px 10px;color:var(--white);font-family:'DM Mono',monospace;font-size:14px;font-weight:600;outline:none;transition:border-color .2s;}
+.bm-input:focus{border-color:var(--yellow);}
+.bm-input::placeholder{color:var(--muted);font-weight:400;}
+.bm-start{font-family:'DM Mono',monospace;font-size:9px;color:var(--light);margin-top:4px;}
+.save-bm-btn{width:100%;padding:11px;background:var(--yellow);color:var(--bg);font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;border:none;border-radius:8px;cursor:pointer;margin-top:6px;}
+.log-form{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:14px;}
+.input-row{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:9px;}
+@media(max-width:400px){.input-row{grid-template-columns:1fr;}}
+.form-group{margin-bottom:9px;}
+.form-label{display:block;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--light);margin-bottom:4px;}
+.form-input,.form-select,.form-textarea{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:8px 11px;color:var(--white);font-family:'Barlow',sans-serif;font-size:14px;outline:none;transition:border-color .2s;-webkit-appearance:none;}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--yellow);}
+.form-textarea{min-height:68px;resize:vertical;}.form-select{cursor:pointer;}
+.submit-btn{width:100%;padding:11px;background:var(--yellow);color:var(--bg);font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;border:none;border-radius:8px;cursor:pointer;}
+.log-history-title{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:700;letter-spacing:.06em;color:var(--white);margin-bottom:9px;display:flex;justify-content:space-between;align-items:center;}
+.export-btn{padding:5px 11px;background:transparent;border:1px solid var(--border);border-radius:6px;color:var(--light);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.08em;cursor:pointer;}
+.log-entry{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:11px 13px;margin-bottom:7px;position:relative;}
+.le-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5px;padding-right:60px;}
+.le-date{font-family:'DM Mono',monospace;font-size:10px;color:var(--yellow);letter-spacing:.08em;font-weight:500;}
+.le-type{font-family:'DM Mono',monospace;font-size:9px;padding:2px 7px;border-radius:4px;background:rgba(79,195,247,.15);border:1px solid rgba(79,195,247,.3);color:#7dd3fc;letter-spacing:.06em;text-transform:uppercase;}
+.le-score{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;color:var(--white);letter-spacing:.04em;margin-bottom:2px;}
+.le-feel{font-family:'DM Mono',monospace;font-size:10px;color:var(--light);margin-top:3px;}
+.le-notes{font-size:13px;color:var(--light);margin-top:4px;line-height:1.5;}
+.le-del{position:absolute;top:8px;right:8px;background:rgba(255,77,109,.12);border:1px solid rgba(255,77,109,.25);color:var(--red);font-size:11px;cursor:pointer;padding:4px 8px;border-radius:5px;font-family:'DM Mono',monospace;}
+.le-del:hover{background:rgba(255,77,109,.25);}
+.empty-log{text-align:center;padding:30px 0;font-family:'DM Mono',monospace;font-size:11px;color:var(--light);letter-spacing:.1em;}
+.info-section{margin-bottom:22px;}
+.info-section-title{font-family:'Barlow Condensed',sans-serif;font-size:19px;font-weight:700;letter-spacing:.06em;color:var(--yellow);margin-bottom:9px;padding-bottom:5px;border-bottom:1px solid var(--border);}
+.info-card{background:var(--card);border:1px solid var(--border2);border-radius:10px;padding:13px 15px;margin-bottom:7px;font-size:13px;color:#bbbdd0;line-height:1.75;}
+.info-card h4{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--orange);margin-bottom:5px;}
+.info-card ul{padding-left:14px;}.info-card li{margin-bottom:2px;}.info-card strong{color:var(--white);}
+.alert-box{border-radius:8px;padding:11px 13px;margin-bottom:7px;font-size:13px;color:#bbbdd0;line-height:1.65;}
+.alert-box h4{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;}
+.a-warn{background:rgba(255,107,53,.08);border:1px solid rgba(255,107,53,.25);}.a-warn h4{color:var(--orange);}
+.a-blue{background:rgba(79,195,247,.07);border:1px solid rgba(79,195,247,.2);}.a-blue h4{color:var(--blue);}
+.a-green{background:rgba(79,255,176,.07);border:1px solid rgba(79,255,176,.2);}.a-green h4{color:var(--green);}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
+@media(max-width:480px){.two-col{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<div class="app-header">
+  <div class="header-top">
+    <div class="app-title">CF <span>2027</span></div>
+    <div class="header-meta">
+      <div id="today-date"></div>
+      <div>Well-Rounded Athlete &middot; <span style="color:var(--yellow)">Top 10%</span></div>
+    </div>
+  </div>
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="showTab('dashboard',this)">Dashboard</button>
+    <button class="tab-btn" onclick="showTab('programme',this)">Programme</button>
+    <button class="tab-btn" onclick="showTab('benchmarks',this)">Benchmarks</button>
+    <button class="tab-btn" onclick="showTab('tracker',this)">Tracker</button>
+    <button class="tab-btn" onclick="showTab('info',this)">Info</button>
+  </div>
+</div>
+
+<div id="tab-dashboard" class="tab-pane active">
+<div class="page">
+  <div class="countdown-hero">
+    <div class="cd-label">2027 CrossFit Open</div>
+    <div class="cd-number" id="days-cd">--</div>
+    <div class="cd-unit">Days to Go</div>
+    <div class="cd-date">Train to be a great athlete &mdash; the Open reflects that</div>
+  </div>
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-val" id="stat-done">0</div><div class="stat-lbl">Sessions Done</div></div>
+    <div class="stat-card"><div class="stat-val" id="stat-weeks">0</div><div class="stat-lbl">Wks Complete</div></div>
+    <div class="stat-card"><div class="stat-val" id="stat-pct">0%</div><div class="stat-lbl">Block Progress</div></div>
+  </div>
+  <div class="spider-card">
+    <div class="spider-title">Athlete Profile</div>
+    <div class="spider-sub">CURRENT FITNESS SNAPSHOT &middot; UPDATE EACH BLOCK RETEST</div>
+    <div class="spider-wrap">
+      <div style="flex:0 0 auto;"><canvas id="spiderCanvas" width="210" height="210"></canvas></div>
+      <div class="spider-legend" id="spider-legend"></div>
+    </div>
+    <div style="margin-top:10px;font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);text-align:center;letter-spacing:.06em;">Scores update when you save benchmarks &middot; 10 = elite CrossFit level</div>
+  </div>
+  <div class="phase-card">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
+      <div>
+        <div class="phase-title">Block 1 &mdash; Foundation</div>
+        <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--light);margin-top:2px;">Wks 1&ndash;8 &middot; 2 Classes + Open Gym + Z2 &middot; Post-Hyrox Base</div>
+      </div>
+      <span class="phase-badge" id="block-badge">Wk 1/8</span>
+    </div>
+    <div class="bar-track"><div class="bar-fill" id="block-bar" style="width:0%"></div></div>
+    <div class="bar-meta"><span>Week 1</span><span id="block-pct-lbl">0%</span><span>Week 8 Retest</span></div>
+  </div>
+  <div class="this-week-card" onclick="goToProg()">
+    <div class="tw-header">
+      <div><div class="tw-title" id="tw-title">This Week</div><div class="tw-tag" id="tw-focus">--</div></div>
+      <div class="goto-link">View Plan &rarr;</div>
+    </div>
+    <div class="day-pills" id="tw-pills"></div>
+  </div>
+</div>
+</div>
+
+<div id="tab-programme" class="tab-pane">
+<div class="page">
+  <div class="block-header">
+    <h2>Block 1 &mdash; <span style="color:var(--yellow)">Foundation</span></h2>
+    <p>8 Weeks &middot; 2 CF Classes + Open Gym + Z2 &middot; Tick sessions as you complete them</p>
+  </div>
+  <button class="export-block-btn" onclick="exportForCoach()">&#128228; Export Block 1 Data &mdash; For Next Block Programming</button>
+  <div id="weeks-container"></div>
+</div>
+</div>
+
+<div id="tab-benchmarks" class="tab-pane">
+<div class="page">
+  <div style="font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:800;letter-spacing:.05em;color:var(--white);margin-bottom:3px;">Benchmarks</div>
+  <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--light);margin-bottom:14px;">Log your current numbers &middot; Spider chart updates on Save</div>
+  <div class="bm-section-title">&#9889; Conditioning</div><div class="bm-grid" id="bm-conditioning"></div>
+  <div class="bm-section-title">&#127947; Lifting</div><div class="bm-grid" id="bm-lifting"></div>
+  <div class="bm-section-title">&#129336; Gymnastics</div><div class="bm-grid" id="bm-gymnastics"></div>
+  <button class="save-bm-btn" onclick="saveBenchmarks()">Save Benchmarks</button>
+  <div id="bm-msg" style="display:none;text-align:center;font-family:'DM Mono',monospace;font-size:11px;color:var(--green);letter-spacing:.1em;margin-top:7px;">&#10003; SAVED &middot; CHART UPDATED</div>
+</div>
+</div>
+
+<div id="tab-tracker" class="tab-pane">
+<div class="page">
+  <div style="font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:800;letter-spacing:.05em;color:var(--white);margin-bottom:14px;">Log Session</div>
+  <div class="log-form">
+    <div class="input-row">
+      <div class="form-group" style="margin-bottom:0"><label class="form-label">Date</label><input type="date" id="t-date" class="form-input"></div>
+      <div class="form-group" style="margin-bottom:0"><label class="form-label">Week #</label><input type="number" id="t-week" class="form-input" placeholder="1" min="1" max="8"></div>
+    </div>
+    <div class="form-group"><label class="form-label">Session Type</label>
+      <select id="t-type" class="form-select">
+        <option>Day 1 -- CrossFit Class</option><option>Day 2 -- Open Gym</option>
+        <option>Day 3 -- CrossFit Class</option><option>Day 4 -- Zone 2 Aerobic</option>
+        <option>Day 5 -- Extra (Class or Aerobic)</option><option>Benchmark Retest</option><option>Active Recovery</option>
+      </select>
+    </div>
+    <div class="form-group"><label class="form-label">Score / Key Result</label><input type="text" id="t-score" class="form-input" placeholder="e.g. Grace 3:12 / Jerk 95kg / AMRAP 6 rds"></div>
+    <div class="input-row">
+      <div class="form-group" style="margin-bottom:0"><label class="form-label">Energy (1-10)</label>
+        <select id="t-feel" class="form-select"><option value="">--</option><option>10 -- Crushed it</option><option>8 -- Strong</option><option>7 -- Solid</option><option>5 -- Flat</option><option>3 -- Rough</option></select>
+      </div>
+      <div class="form-group" style="margin-bottom:0"><label class="form-label">Key Lift / Load</label><input type="text" id="t-lift" class="form-input" placeholder="e.g. Jerk 90kg / Snatch 80kg"></div>
+    </div>
+    <div class="form-group"><label class="form-label">Notes</label><textarea id="t-notes" class="form-textarea" placeholder="Rep schemes, how it felt, what to change next time..."></textarea></div>
+    <button class="submit-btn" onclick="saveLog()">Log Session</button>
+  </div>
+  <div class="log-history-title"><span>History</span><button class="export-btn" onclick="exportLog()">Export JSON</button></div>
+  <div id="log-entries"></div>
+</div>
+</div>
+
+<div id="tab-info" class="tab-pane">
+<div class="page">
+  <div style="font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:800;letter-spacing:.05em;color:var(--white);margin-bottom:3px;">General Info</div>
+  <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--light);margin-bottom:18px;">Philosophy &middot; Structure &middot; Priorities &middot; Fatigue Rules</div>
+  <div class="info-section">
+    <div class="info-section-title">The Philosophy</div>
+    <div class="info-card">Train to be a <strong>well-rounded athlete</strong>. The CrossFit Open is a byproduct &mdash; a test of how far you have come, not the only reason you train. Build a genuine aerobic engine, real gymnastics capacity, efficient barbell technique, and the ability to work in all time domains. The Open will reflect all of it naturally.</div>
+    <div class="info-card"><h4>How Blocks Work</h4>Each block is <strong>8 weeks</strong> of programming. At the end of Week 8 you retest benchmarks, export your data, and the next block gets generated based on your actual progress. The programme adapts to you, not a fixed plan written before you have trained.</div>
+    <div class="info-card"><h4>Your Starting Point (2025)</h4><ul>
+      <li><strong>Open result:</strong> 72nd percentile (top 28%) &mdash; target: 90th percentile (top 10%)</li>
+      <li><strong>Strength:</strong> Squat 160 / DL 190 / Bench 110 &mdash; already near top-10% level</li>
+      <li><strong>Olympic lifting:</strong> C&amp;J 110 / Snatch 90 &mdash; technique gap on jerk and squat snatch</li>
+      <li><strong>Gymnastics:</strong> Pull-ups strong, TTB 5&ndash;8/set, BMU 2&ndash;5 linked, HS walk limited</li>
+      <li><strong>Conditioning:</strong> Good long-duration base (Murph 45:30), weak under barbell load and in sprint domain</li>
+    </ul></div>
+  </div>
+  <div class="info-section">
+    <div class="info-section-title">Weekly Structure</div>
+    <div class="info-card"><h4>Day 1 &mdash; CrossFit Class &middot; 60 min</h4>Full class as programmed. Classes cover compound lifting stimulus &mdash; no extra strength work needed. Optional 5 min after: TTB sets, burpee drills, or BMU practice &mdash; always skippable.</div>
+    <div class="info-card"><h4>Day 2 &mdash; Open Gym &middot; ~55 min</h4><strong>20 min Oly skill:</strong> Rotating weekly &mdash; jerk, snatch, C&amp;J cycling. Barbell efficiency that classes do not address.<br><strong>15&ndash;20 min Gymnastics:</strong> Rotating &mdash; TTB, BMU, HS walk, rope climbs, deficit HSPU.<br><strong>15 min Targeted piece:</strong> Short metcon, threshold interval, or benchmark. Escalates each block.</div>
+    <div class="info-card"><h4>Day 3 &mdash; CrossFit Class &middot; 60 min</h4>Full class. Optional 5 min after: different focus to Day 1 optional. Always skippable.</div>
+    <div class="info-card"><h4>Day 4 &mdash; Zone 2 Aerobic &middot; 25&ndash;50 min</h4>Run, bike, or row at <strong>fully conversational pace</strong> (HR below 145bpm). This is the session that builds the aerobic engine classes cannot provide. Duration builds through blocks, reduces in taper.</div>
+    <div class="info-card"><h4>Optional Day 5</h4>A third class or easy aerobic session when life allows. Never forced &mdash; the plan works on 4 days.</div>
+    <div class="info-card"><h4>The Dad Rule</h4>When life gives you 3 days: <strong>1)</strong> Open gym &rarr; <strong>2)</strong> CF class &rarr; <strong>3)</strong> Drop the Z2 or shorten to 20 min walk. Never sacrifice sleep for a session.</div>
+  </div>
+  <div class="info-section">
+    <div class="info-section-title">Development Priorities</div>
+    <div class="alert-box a-warn"><h4>1 &mdash; Build a Real Aerobic Engine</h4>Your biggest long-term return. Zone 2 work and sustained metcon capacity is what separates you from top-10%. Strength is already there &mdash; the engine is the gap.</div>
+    <div class="alert-box a-blue"><h4>2 &mdash; Overhead Efficiency &amp; Jerk Confidence</h4>Overhead instability costs you in every jerk, OHS, and HSPU workout. Deliberate weekly jerk and snatch practice compounds into a real advantage over 8-week blocks.</div>
+    <div class="alert-box a-blue"><h4>3 &mdash; TTB &amp; Muscle-Up Volume</h4>TTB at 5&ndash;8 reps and BMU at 2&ndash;5 linked caps your score in any gymnastics workout. Needs structured practice, not random class reps.</div>
+    <div class="alert-box a-green"><h4>4 &mdash; Barbell Cycling Efficiency</h4>Strength under load is there. Touch-and-go cycling, breathing patterns, and moderate-load efficiency is the skill gap that the open gym sessions target directly.</div>
+    <div class="alert-box a-green"><h4>5 &mdash; Sprint Domain &amp; Burpee Pace</h4>8&ndash;14 min is your weakest time domain. Burpees are a pacing skill. Both get targeted in open gym sessions each block.</div>
+  </div>
+  <div class="info-section">
+    <div class="info-section-title">Fatigue &amp; Warning Signs</div>
+    <div class="two-col">
+      <div class="info-card"><h4 style="color:var(--red)">Red &mdash; Reduce Load</h4><ul><li>Sleep under 6h for 3+ nights</li><li>Resting HR up 8+ bpm</li><li>Zero motivation 3+ days</li><li>Performance drops 2+ sessions</li><li>Joint pain (not DOMS)</li><li>Illness &mdash; skip entirely</li></ul></div>
+      <div class="info-card"><h4 style="color:var(--yellow)">Amber &mdash; Modify</h4><ul><li>High work stress: easy class only</li><li>Lingering soreness: skip targeted piece</li><li>Flat in warm-up: reduce intensity 20%</li><li>Life stress high: sleep beats training</li></ul></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+// Storage
+var SK='cf27b1_s', BK='cf27b1_b', LK='cf27b1_l';
+function gs(k){try{return JSON.parse(localStorage.getItem(k))||{};}catch(e){return{};}}
+function gl(){try{return JSON.parse(localStorage.getItem(LK))||[];}catch(e){return[];}}
+function ss(k,v){localStorage.setItem(k,JSON.stringify(v));}
+
+// RPE helper - returns plain HTML string, no template literals
+function R(n,lbl,desc){
+  var c=n<=3?'ri-easy':n<=6?'ri-mod':n<=8?'ri-hard':'ri-max';
+  return '<span class="ri '+c+'">'+lbl+' RPE <span class="ri-n">'+n+'</span> &mdash; '+desc+'</span>';
+}
+
+// Programme - all content built with string concatenation
+var P=[
+  // ── WEEK 1: Foundation · Post-Hyrox Return ──────────────────────────────
+  {wk:1,focus:'Foundation',sub:'Post-Hyrox Return &middot; Baseline Week',deload:false,days:[
+    {lbl:'Day 1 &mdash; CrossFit Class',type:'class',tl:'CF Class',
+     rpe:[[6,'Class','Post-Hyrox week 1 &mdash; ease back in']],
+     title:'CrossFit Class &mdash; Controlled Return',
+     body:'Full class. First week back after Hyrox &mdash; scale intensity 15&ndash;20% below normal. Body is still recovering.'
+       +'<br>'+R(6,'Class','RPE 6. No heroics. You are back to build.')
+       +'<div class="wb-note">Optional 5 min after: 3 &times; 8 TTB at easy pace &mdash; kip rhythm only.</div>'},
+    {lbl:'Day 2 &mdash; Open Gym (Block 1 Baselines)',type:'retest',tl:'Baselines',
+     rpe:[[6,'Baselines','Honest numbers &mdash; not all-out effort']],
+     title:'Block 1 Baselines &mdash; Record Everything',
+     body:'<div class="wb-s grn">BLOCK 1 START BASELINES</div>'
+       +'<strong>These numbers are your Week 1 starting point. You will retest all of them in Week 8 to measure your full block progress.</strong><br><br>'
+       +'<strong>1. Jerk:</strong> Work up to a comfortable heavy single split jerk. Honest number, not a true max &mdash; post-Hyrox body.<br>'
+       +'<strong>2. Muscle-ups:</strong> Max linked BMU (or RMU if stronger). Rest 3 min &rarr; 2 more max sets. Log all three.<br>'
+       +'<strong>3. TTB:</strong> 3 &times; max set unbroken TTB, 90s rest. Log each set.<br>'
+       +'<strong>4. Burpees:</strong> 3 min AMRAP burpees at a sustainable pace. Log count.<br>'
+       +'<strong>5. Benchmark metcon:</strong> 3 rounds for time: 21 wall balls @ 9kg / 15 TTB / 9 HPC @ 80kg. Rep plan: WB 15+6 / TTB 8+7 / Cleans 5+4<br><br>'
+       +'Keep total session to 45&ndash;50 min. This is data collection, not performance day.'
+       +'<br>'+R(6,'Baselines','RPE 6 overall &mdash; honest effort, not all-out. Post-Hyrox body needs to ease in.')
+       +'<div class="wb-note">Log every number in the Benchmarks tab before you leave. These are your block 1 start points.</div>'},
+    {lbl:'Day 3 &mdash; CrossFit Class',type:'class',tl:'CF Class',
+     rpe:[[6,'Class','Second easy class &mdash; Hyrox recovery week']],
+     title:'CrossFit Class',
+     body:'Full class. Keep intensity controlled.'
+       +'<br>'+R(6,'Class','RPE 6. Recovery week.')
+       +'<div class="wb-note">Optional 5 min after: 10 slow burpees &mdash; exhale on push-up, inhale at top. Breathing practice.</div>'},
+    {lbl:'Day 4 &mdash; Zone 2 Aerobic',type:'aerobic',tl:'Aerobic',
+     rpe:[[4,'Z2','Skip if Hyrox legs still heavy']],
+     title:'Easy Z2 &mdash; 25 min',
+     body:'<strong>25 min easy Zone 2</strong> &mdash; run, bike, or row at fully conversational pace. HR below 140bpm.'
+       +'<br>'+R(4,'Z2','RPE 4. The most underrated session in this plan &mdash; this is where the aerobic base gets built.')
+       +'<div class="wb-note">Skip entirely if Hyrox legs are still heavy. No guilt &mdash; it will be here every week.</div>'}
+  ]},
+  // ── WEEK 2: Foundation · Aerobic Base + BMU Intro ───────────────────────
+  {wk:2,focus:'Foundation',sub:'Aerobic Base &middot; BMU Intro',deload:false,days:[
+    {lbl:'Day 1 &mdash; CrossFit Class',type:'class',tl:'CF Class',
+     rpe:[[7,'Class','Back to full intensity']],
+     title:'CrossFit Class',
+     body:'Full class. Back to normal effort &mdash; Hyrox recovery complete.'
+       +'<br>'+R(7,'Class','RPE 7&ndash;8.')
+       +'<div class="wb-note">Optional 5 min after: 3 &times; max TTB unbroken. Record each set &mdash; compare to Week 1 baseline.</div>'},
+    {lbl:'Day 2 &mdash; Open Gym',type:'opengym',tl:'Open Gym',
+     rpe:[[5,'HPC Cycling','Barbell efficiency practice'],[5,'BMU Skill','Deliberate &mdash; full rest'],[6,'Aerobic Metcon','RPE 6 throughout']],
+     title:'HPC Cycling + BMU Skill + Aerobic Metcon',
+     body:'<div class="wb-s oly">OLY SKILL &mdash; 18 MIN</div>'
+       +'Hang Power Clean cycling: EMOM 10 &mdash; 4 T&G reps @ 70kg. Focus on breathing between reps, efficient catch, consistent rhythm.'
+       +'<br>'+R(5,'HPC','Light and smooth. Training barbell cycling efficiency &mdash; your Open gap.')
+       +'<div class="wb-s gym">BMU SKILL &mdash; 12 MIN</div>'
+       +'Kipping pull-up + hip-to-bar drill: 5 &times; 3. Then linked BMU attempts: 5 &times; 2 (or max if under 2). Negative BMU: 3 &times; 1 slow descent.'
+       +'<br>'+R(5,'BMU','Full rest between sets. Skill, not conditioning.')
+       +'<div class="wb-s met">AEROBIC METCON &mdash; 15 MIN</div>'
+       +'AMRAP 15: 10 wall balls @ 9kg / 10 TTB / 200m run'
+       +'<br>'+R(6,'AMRAP','RPE 6. Should feel the same in round 1 and round 5. Aerobic ceiling work.')},
+    {lbl:'Day 3 &mdash; CrossFit Class',type:'class',tl:'CF Class',
+     rpe:[[7,'Class','Full effort']],
+     title:'CrossFit Class',
+     body:'Full class.'
+       +'<br>'+R(7,'Class','RPE 7&ndash;8.')
+       +'<div class="wb-note">Optional 5 min after: burpee breathing drill &mdash; 2 min at a sustainable pace. Exhale on push-up every rep.</div>'},
+    {lbl:'Day 4 &mdash; Zone 2 Aerobic',type:'aerobic',tl:'Aerobic',
+     rpe:[[4,'Z2','Conversational throughout']],
+     title:'Z2 Run or Bike &mdash; 30 min',
+     body:'<strong>30 min easy Zone 2</strong> &mdash; run, bike, or row.'
+       +'<br>'+R(4,'Z2','RPE 4. Fully conversational. If HR climbs above 145bpm, slow down.')
+       +'<div class="wb-note">Consistency here compounds &mdash; this session week after week is what builds the engine.</div>'}
+  ]},
+  // ── WEEK 3: Foundation · Split Jerk + HS Walk ───────────────────────────
+  {wk:3,focus:'Foundation',sub:'Split Jerk &middot; HS Walk Intro',deload:false,days:[
+    {lbl:'Day 1 &mdash; CrossFit Class',type:'class',tl:'CF Class',
+     rpe:[[7,'Class','Burpee breathing focus']],
+     title:'CrossFit Class',
+     body:'Full class. On any burpees: exhale on the push-up, inhale at the top. Same rhythm every single rep.'
+       +'<br>'+R(7,'RPE 7&ndash;8. Burpees: hold RPE 6 first half, build to 7 in second half.')
+       +'<div class="wb-note">Optional 5 min after: 2 &times; max TTB unbroken &mdash; compare to Week 2.</div>'},
+    {lbl:'Day 2 &mdash; Open Gym',type:'opengym',tl:'Open Gym',
+     rpe:[[6,'Split Jerk','Heavier than Wk1 &mdash; confident catches only'],[5,'HS Walk','Balance skill &mdash; not cardio'],[7,'Sprint EMOM','Short and sharp']],
+     title:'Split Jerk + HS Walk + Sprint EMOM',
+     body:'<div class="wb-s oly">SPLIT JERK &mdash; 20 MIN</div>'
+       +'Split Jerk: 5 &times; 2 @ 65&ndash;72kg. Aggressive footwork, back foot lands flat, fast foot recovery. Slightly heavier than Week 1 baseline.'
+       +'<br>'+R(6,'Jerk','Every rep technically sound. Stop if catch feels uncertain &mdash; no misses.')
+       +'<div class="wb-s gym">HS WALK SKILL &mdash; 15 MIN</div>'
+       +'Wall-facing HS hold: 3 &times; 20 sec. Then 8&ndash;10 attempts for max distance. Target: 3&ndash;5m consistent.'
+       +'<br>'+R(5,'HS Walk','Balance and neurological skill. Full rest between attempts &mdash; not a conditioning piece.')
+       +'<div class="wb-s met">SPRINT EMOM &mdash; 10 MIN</div>'
+       +'EMOM 10: Odd &mdash; 8 burpee box jump overs &nbsp;/&nbsp; Even &mdash; 10 kipping HSPU'
+       +'<br>'+R(7,'EMOM','Target 45&ndash;50s of work each minute. Scale HSPU to strict or pike if kipping fails.')},
+    {lbl:'Day 3 &mdash; CrossFit Class',type:'class',tl:'CF Class',
+     rpe:[[7,'Class','Full effort']],
+     title:'CrossFit Class',
+     body:'Full class.'
+       +'<br>'+R(7,'Class','RPE 7&ndash;8.')
+       +'<div class="wb-note">Optional 5 min after: 5 rope climbs &mdash; efficiency and foot lock focus.</div>'},
+    {lbl:'Day 4 &mdash; Zone 2 Aerobic',type:'aerobic',tl:'Aerobic',
+     rpe:[[4,'Z2','Easy &mdash; add 5 min vs last week']],
+     title:'Z2 Run or Bike &mdash; 30&ndash;35 min',
+     body:'<strong>30&ndash;35 min easy Zone 2</strong>.'
+       +'<br>'+R(4,'Z2','Add 5 min vs Week 2 if last week felt genuinely easy and conversational.')}
+  ]},
+  // ── WEEK 4: Foundation · Snatch Intro + Intensification ─────────────────
+  {wk:4,focus:'Foundation',sub:'Snatch Intro &middot; Intensification',deload:false,days:[
+    {lbl:'Day 1 &mdash; CrossFit Class',type:'class',tl:'CF Class',
+     rpe:[[8,'Class','Intensification starts &mdash; push harder this week']],
+     title:'CrossFit Class &mdash; Intensification',
+     body:'Full class. Week 4 &mdash; step up the intensity.'
+       +'<br>'+R(8,'Class','RPE 8.')
+       +'<div class="wb-note">Optional 5 min after: 3 &times; max TTB &mdash; should be improving week on week from your Week 1 baseline.</div>'},
+    {lbl:'Day 2 &mdash; Open Gym',type:'opengym',tl:'Open Gym',
+     rpe:[[5,'Squat Snatch','Technique only &mdash; receiving position'],[6,'BMU + TTB','Progressive linking'],[6,'Barbell EMOM','Cycling efficiency focus']],
+     title:'Squat Snatch Technique + BMU/TTB + Barbell Cycling EMOM',
+     body:'<div class="wb-s oly">SQUAT SNATCH &mdash; 20 MIN</div>'
+       +'Squat Snatch: 5 &times; 2 @ 60&ndash;65% max (~54&ndash;58kg). Focus: sit into the catch &mdash; receiving position only. No power snatch today.'
+       +'<br>'+R(5,'Snatch','Technique only. If the catch feels uncertain at this load, stay here. This is skill practice.')
+       +'<div class="wb-s gym">GYMNASTICS SKILL &mdash; 12 MIN</div>'
+       +'BMU: 6 &times; 2, turnover speed focus. Then TTB: 3 &times; max set, rest 90s. Record all sets.'
+       +'<br>'+R(6,'Gymnastics','BMU quality every rep. TTB genuine max effort each set.')
+       +'<div class="wb-s met">BARBELL CYCLING EMOM &mdash; 12 MIN</div>'
+       +'EMOM 12 (4 cycles): Min 1 &mdash; 5 power cleans @ 75kg T&G &nbsp;/&nbsp; Min 2 &mdash; 6 shoulder to overhead @ 55kg &nbsp;/&nbsp; Min 3 &mdash; rest'
+       +'<br>'+R(6,'EMOM','10&ndash;15s spare each minute. Reduce load if cutting it close. Cycling efficiency over weight.')},
+    {lbl:'Day 3 &mdash; CrossFit Class',type:'class',tl:'CF Class',
+     rpe:[[8,'Class','Full effort']],
+     title:'CrossFit Class',
+     body:'Full class.'
+       +'<br>'+R(8,'Class','RPE 8.')
+       +'<div class="wb-note">Optional 5 min after: 10 slow burpees &mdash; pacing drill. Find a rhythm you could hold for 60 reps.</div>'},
+    {lbl:'Day 4 &mdash; Zone 2 Aerobic',type:'aerobic',tl:'Aerobic',
+     rpe:[[4,'Z2','Easy 35 min']],
+     title:'Z2 Run or Bike &mdash; 35 min',
+     body:'<strong>35 min easy Zone 2</strong>.'
+       +'<br>'+R(4,'Z2','Finish feeling like you could go another 20 min. That is the right intensity.')}
+  ]},
+  // ── WEEK 5: Foundation · Volume Build + Long Aerobic ────────────────────
+  {wk:5,focus:'Foundation',sub:'Volume Build &middot; Long Aerobic',deload:false,days:[
+    {lbl:'Day 1 &mdash; CrossFit Class',type:'class',tl:'CF Class',
+     rpe:[[8,'Class','Positive splits &mdash; build through the workout']],
+     title:'CrossFit Class &mdash; Positive Splits',
+     body:'Full class. In any AMRAP: push the pace in the last 3 minutes. Practice finishing stronger than you started.'
+       +'<br>'+R(8,'Class','First half RPE 7. Second half build to 8&ndash;9.')
+       +'<div class="wb-note">Optional 5 min after: 3 &times; max TTB unbroken &mdash; tracking weekly progress.</div>'},
+    {lbl:'Day 2 &mdash; Open Gym',type:'opengym',tl:'Open Gym',
+     rpe:[[6,'C&J Cycling','Barbell efficiency &mdash; rhythm and breathing'],[6,'BMU Volume','Density challenge'],[6,'Open AMRAP','Aerobic ceiling &mdash; even splits all the way']],
+     title:'C&J Cycling + BMU Volume + Open-Style AMRAP',
+     body:'<div class="wb-s oly">C&J CYCLING &mdash; 18 MIN</div>'
+       +'Clean &amp; Jerk cycling: EMOM 10 &mdash; 2 C&J @ 70% max (~77kg). Touch-and-go cleans, split jerk. Focus on breathing rhythm between reps.'
+       +'<br>'+R(6,'C&J','Smooth and controlled. Barbell cycling practice &mdash; not a strength piece.')
+       +'<div class="wb-s gym">BMU VOLUME &mdash; 10 MIN</div>'
+       +'Every 90s &times; 5: 2&ndash;3 BMU (or max if fewer). Quality every rep.'
+       +'<br>'+R(6,'BMU','Density challenge &mdash; technique every set.')
+       +'<div class="wb-s met">OPEN-STYLE AMRAP &mdash; 15 MIN</div>'
+       +'AMRAP 15: 10 wall balls @ 9kg / 8 TTB / 10 power snatches @ 45kg'
+       +'<br>'+R(6,'AMRAP','RPE 6 throughout. Round 1 and Round 5 should feel the same. This is aerobic ceiling work.')},
+    {lbl:'Day 3 &mdash; CrossFit Class',type:'class',tl:'CF Class',
+     rpe:[[8,'Class','Full effort']],
+     title:'CrossFit Class',
+     body:'Full class.'
+       +'<br>'+R(8,'Class','RPE 8.')
+       +'<div class="wb-note">Optional 5 min after: HS walk &mdash; 5 attempts for max distance. Tracking weekly progress.</div>'},
+    {lbl:'Day 4 &mdash; Zone 2 Aerobic',type:'aerobic',tl:'Aerobic',
+     rpe:[[4,'Z2','Longest aerobic session of block 1 so far']],
+     title:'Z2 Run or Bike &mdash; 40 min',
+     body:'<strong>40 min easy Zone 2</strong> &mdash; longest aerobic session of Block 1.'
+       +'<br>'+R(4,'Z2','RPE 4. Fully conversational. This is where the aerobic engine gets built over time.')}
+  ]},
+  // ── WEEK 6: Foundation · Heavier Loads + Build Intensity ────────────────
+  {wk:6,focus:'Foundation',sub:'Heavier Loads &middot; Build Intensity',deload:false,days:[
+    {lbl:'Day 1 &mdash; CrossFit Class',type:'class',tl:'CF Class',
+     rpe:[[8,'Class','High intensity &mdash; approaching build week']],
+     title:'CrossFit Class &mdash; High Intensity',
+     body:'Full class. Push the intensity this week &mdash; you are approaching the build week.'
+       +'<br>'+R(8,'Class','RPE 8.')
+       +'<div class="wb-note">Optional 5 min after: 3 &times; max TTB &mdash; compare to Week 5.</div>'},
+    {lbl:'Day 2 &mdash; Open Gym',type:'opengym',tl:'Open Gym',
+     rpe:[[7,'Jerk Loading','Heaviest jerk work of the block'],[7,'Snatch','Confident working singles'],[6,'Long AMRAP','Aerobic piece &mdash; note first movement to break']],
+     title:'Heavy Jerk Loading + Snatch Singles + Long AMRAP',
+     body:'<div class="wb-s oly">JERK LOADING &mdash; 20 MIN</div>'
+       +'Split Jerk: build to a confident heavy single (heaviest of the block so far). Then 3 &times; 2 @ 85% of that. Rest 2 min between.'
+       +'<br>'+R(7,'Jerk','RPE 7&ndash;8. No misses. The goal is a confident new working max, not a true 1RM grind.')
+       +'<br>Then: Squat Snatch working singles &mdash; 5 &times; 1 @ 75&ndash;80% max. Technical and confident.'
+       +'<br>'+R(6,'Snatch','Consistent receiving position. Build from Week 4 technique work.')
+       +'<div class="wb-s met">LONG AEROBIC AMRAP &mdash; 18 MIN</div>'
+       +'AMRAP 18: 1 rope climb / 15 wall balls @ 9kg / 10 TTB / 200m run'
+       +'<br>'+R(6,'AMRAP','RPE 6. Note which movement breaks first each round &mdash; that signals your next focus area.')
+       +'<div class="wb-note">Log jerk and snatch numbers in Benchmarks tab.</div>'},
+    {lbl:'Day 3 &mdash; CrossFit Class',type:'class',tl:'CF Class',
+     rpe:[[8,'Class','Full effort']],
+     title:'CrossFit Class',
+     body:'Full class.'
+       +'<br>'+R(8,'Class','RPE 8.')
+       +'<div class="wb-note">Optional 5 min after: 5 rope climbs &mdash; legless if possible. Efficiency focus.</div>'},
+    {lbl:'Day 4 &mdash; Zone 2 Aerobic',type:'aerobic',tl:'Aerobic',
+     rpe:[[4,'Z2','Easy 35 min']],
+     title:'Z2 Run or Bike &mdash; 35 min',
+     body:'<strong>35 min easy Zone 2</strong>.'
+       +'<br>'+R(4,'Z2','RPE 4.')}
+  ]},
+  // ── WEEK 7: Foundation · Build Week ─────────────────────────────────────
+  {wk:7,focus:'Foundation',sub:'Build Week &mdash; Express Your Fitness',deload:false,days:[
+    {lbl:'Day 1 &mdash; CrossFit Class',type:'class',tl:'CF Class',
+     rpe:[[9,'Class','End of block &mdash; do not hold back']],
+     title:'CrossFit Class &mdash; Push Hard',
+     body:'End of the block &mdash; express everything you have built. Do not hold back.'
+       +'<br>'+R(9,'Class','RPE 8&ndash;9. This is your highest intensity class of the block.')
+       +'<div class="wb-note">Optional 5 min after: 3 &times; max BMU linked &mdash; log reps. Compare to Week 1 baseline.</div>'},
+    {lbl:'Day 2 &mdash; Open Gym',type:'opengym',tl:'Open Gym',
+     rpe:[[8,'Hard Metcon','Hardest conditioning of block 1'],[7,'Jerk','Sharp confident singles'],[8,'TTB Max','Express block 1 gymnastics']],
+     title:'Hard Metcon + Jerk Sharpening + TTB Volume',
+     body:'<div class="wb-s met">HARD METCON &mdash; 20 MIN</div>'
+       +'5 rounds for time: 12 cal row / 10 burpee box jump overs / 8 thrusters @ 50kg'
+       +'<br>'+R(8,'Metcon','Rounds 1&ndash;3: RPE 7&ndash;8. Rounds 4&ndash;5: RPE 9. Hardest conditioning session of Block 1. Target sub-20 min.')
+       +'<div class="wb-s oly">JERK SHARPENING &mdash; 10 MIN</div>'
+       +'After 8 min rest: 5 &times; 1 split jerk @ 80&ndash;85% max. Fast, confident, crisp recovery.'
+       +'<br>'+R(7,'Jerk','Building on Week 6 heavy work. Should feel sharp at this percentage.')
+       +'<div class="wb-s gym">TTB MAX SETS &mdash; 8 MIN</div>'
+       +'3 &times; max set TTB. Rest 90s between. Record all sets &mdash; expressing Block 1 gymnastics progress.'
+       +'<br>'+R(8,'TTB','Genuine max effort each set. Compare to Week 1 baseline.')},
+    {lbl:'Day 3 &mdash; CrossFit Class',type:'class',tl:'CF Class',
+     rpe:[[8,'Class','Build week &mdash; push both class sessions']],
+     title:'CrossFit Class',
+     body:'Full class. Build week &mdash; push hard on both class days.'
+       +'<br>'+R(8,'Class','RPE 8.')
+       +'<div class="wb-note">Optional 5 min after: HS walk &mdash; 6&ndash;8 attempts for max distance. Tracking progress from Week 3.</div>'},
+    {lbl:'Day 4 &mdash; Zone 2 Aerobic',type:'aerobic',tl:'Aerobic',
+     rpe:[[4,'Z2','Longest aerobic session of block 1']],
+     title:'Z2 Run or Bike &mdash; 40&ndash;45 min',
+     body:'<strong>40&ndash;45 min easy Zone 2</strong> &mdash; longest aerobic session of Block 1.'
+       +'<br>'+R(4,'Z2','RPE 4. Fully conversational. This is a habit now &mdash; protect it.')}
+  ]},
+  // ── WEEK 8: Deload + Full Retest ─────────────────────────────────────────
+  {wk:8,focus:'Deload + Retest',sub:'Active Recovery &middot; Measure Your Progress',deload:true,days:[
+    {lbl:'Day 1 &mdash; CrossFit Class (Easy)',type:'deload',tl:'Deload',
+     rpe:[[5,'Class','Deload &mdash; 70% intensity']],
+     title:'CrossFit Class &mdash; Deload',
+     body:'Full class but scale back to 70% of normal intensity. No max efforts this week.'
+       +'<br>'+R(5,'Class','RPE 5. Active recovery. The deload is when adaptation from the previous 7 weeks actually happens.')
+       +'<div class="wb-note">Optional 5 min after: 3 min AMRAP burpees &mdash; compare to your Week 1 baseline count. Log in Benchmarks.</div>'},
+    {lbl:'Day 2 &mdash; Open Gym (Full Retest)',type:'retest',tl:'Retest',
+     rpe:[[9,'All retests','Max effort &mdash; full rest between every movement']],
+     title:'Block 1 Full Retest &mdash; Compare to Week 1 Baselines',
+     body:'<div class="wb-s grn">JERK RETEST</div>'
+       +'Work to a confident heavy single split jerk. Compare directly to your Week 1 baseline. How has confidence changed?'
+       +'<br>'+R(8,'Jerk','Log in Benchmarks. Should be heavier and feel more confident than Week 1.')
+       +'<div class="wb-s grn">MU RETEST</div>'
+       +'Max linked BMU or RMU. Rest 3 min &rarr; 2 more max sets. Compare all three sets to Week 1.'
+       +'<br>'+R(9,'MU','Full rest between each movement. These are your true max efforts.')
+       +'<div class="wb-s grn">TTB RETEST</div>'
+       +'3 &times; max set TTB, 90s rest. Compare to Week 1 baseline sets.'
+       +'<br>'+R(9,'TTB','Max effort each set.')
+       +'<div class="wb-s grn">BENCHMARK METCON RETEST</div>'
+       +'3 rounds for time: 21 wall balls @ 9kg / 15 TTB / 9 HPC @ 80kg. Use the same rep-break plan as Week 1 or improve it.'
+       +'<br>'+R(8,'Metcon','Same effort as Week 1. A faster time with same rep plan = your Block 1 conditioning progress.')
+       +'<div class="wb-note">Log everything in Tracker + Benchmarks tabs. Then export Block 1 data from the Programme tab for Block 2 programming.</div>'},
+    {lbl:'Day 3 &mdash; CrossFit Class (Easy)',type:'deload',tl:'Deload',
+     rpe:[[5,'Class','Deload &mdash; easy']],
+     title:'CrossFit Class &mdash; Deload',
+     body:'Full class &mdash; keep it easy.'
+       +'<br>'+R(5,'Class','RPE 5.')
+       +'<div class="wb-note">Optional 5 min after: 2 &times; max TTB &mdash; compare to Week 1 baseline and Week 7 sets.</div>'},
+    {lbl:'Day 4 &mdash; Easy Aerobic + Reflection',type:'deload',tl:'Deload',
+     rpe:[[3,'Easy Z2','Active recovery only']],
+     title:'Easy Z2 &mdash; 25 min + Block 1 Reflection',
+     body:'<strong>25 min very easy Z2</strong> &mdash; walk or light bike.'
+       +'<br>'+R(3,'Z2','RPE 3. Active recovery only.')
+       +'<br><br>Reflect on Block 1: What improved most? What still needs work? Which sessions felt hardest to recover from?'
+       +'<div class="wb-note">Export your Block 1 data from the Programme tab &mdash; paste it back to generate Block 2 programming tailored to your actual results.</div>'}
+  ]}
+];
+
+// Benchmarks
+var BM={
+  conditioning:[
+    {id:'karen',name:'Karen (150 WB)',start:'7:22',target:'sub 5:30',sk:'engine'},
+    {id:'grace',name:'Grace (30 C&J @ 60kg)',start:'3:46',target:'sub 2:30',sk:'barbell'},
+    {id:'helen',name:'Helen',start:'12:40',target:'sub 9:30',sk:'engine'},
+    {id:'fran',name:'Fran (21-15-9)',start:'Unknown',target:'sub 4:00',sk:'engine'},
+    {id:'row2k',name:'2k Row',start:'~8:00',target:'sub 7:00',sk:'engine'},
+    {id:'run5k',name:'5k Run',start:'25:00',target:'sub 22:00',sk:'engine'},
+    {id:'burpee3',name:'3-min Burpee AMRAP',start:'TBD Wk6',target:'+25% from baseline',sk:'sprint'},
+  ],
+  lifting:[
+    {id:'cj',name:'Clean & Jerk 1RM',start:'110kg',target:'120-125kg',sk:'barbell'},
+    {id:'snatch',name:'Snatch 1RM',start:'90kg',target:'100-105kg',sk:'barbell'},
+    {id:'squat',name:'Back Squat 1RM',start:'160kg',target:'170+kg',sk:'strength'},
+    {id:'dl',name:'Deadlift 1RM',start:'190kg',target:'200+kg',sk:'strength'},
+    {id:'press',name:'Strict Press 1RM',start:'72.5kg',target:'82.5kg+',sk:'strength'},
+    {id:'bench',name:'Bench Press 1RM',start:'110kg',target:'115+kg',sk:'strength'},
+  ],
+  gymnastics:[
+    {id:'ttb',name:'TTB Max Set',start:'~8',target:'15+',sk:'gymnastics'},
+    {id:'bmu',name:'BMU Linked',start:'2-5',target:'7-10',sk:'gymnastics'},
+    {id:'rmu',name:'RMU Linked',start:'2-5',target:'5-7',sk:'gymnastics'},
+    {id:'hspukip',name:'Kipping HSPU Max',start:'~20',target:'25+',sk:'gymnastics'},
+    {id:'hspudef',name:'Deficit HSPU (1 AbMat)',start:'0',target:'5+',sk:'skills'},
+    {id:'hswalk',name:'HS Walk Distance',start:'a few steps',target:'20m+',sk:'skills'},
+    {id:'murph',name:'Murph (no vest)',start:'45:30',target:'sub 38:00',sk:'engine'},
+  ]
+};
+
+// Spider axes — based on athlete data analysis
+// Strength 8.5: squat 160/DL 190/bench 110 = near top-10% already
+// Barbell 6.5: C&J 110/snatch 90, technique gap on jerk and squat snatch
+// Engine 5.0: 5k 25min/2k row 8min, gasses on wall balls, weak under load
+// Gymnastics 5.5: pull-ups strong, TTB/BMU limited, HS walk minimal
+// Sprint 4.0: 8-14min worst time domain, burpees slow
+// Skills 5.0: HS walk limited, OHS unstable, jerk confidence 6/10
+var SA=[
+  {key:'strength',  label:'Strength',   col:'#b57bee', val:8.5, desc:'Squat 160 / DL 190 / Bench 110'},
+  {key:'barbell',   label:'Barbell',    col:'#ff6b35', val:6.5, desc:'C&J 110 / Snatch 90 / Jerk technique'},
+  {key:'engine',    label:'Engine',     col:'#4fc3f7', val:5.0, desc:'Aerobic base / sustained output'},
+  {key:'gymnastics',label:'Gymnastics', col:'#4fffb0', val:5.5, desc:'TTB 8/set / BMU 2-5 linked'},
+  {key:'sprint',    label:'Sprint',     col:'#ff4d6d', val:4.0, desc:'8-14 min worst time domain'},
+  {key:'skills',    label:'Skills',     col:'#e8ff47', val:5.0, desc:'HS walk / OHS / jerk confidence'},
+];
+
+// Tabs
+function showTab(name,btn){
+  document.querySelectorAll('.tab-pane').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});
+  document.getElementById('tab-'+name).classList.add('active');
+  if(btn&&btn.classList) btn.classList.add('active');
+  if(name==='tracker'){renderLog();document.getElementById('t-date').valueAsDate=new Date();}
+  if(name==='benchmarks') renderBenchmarks();
+  if(name==='dashboard'){updateDashboard();drawSpider();}
+  if(name==='programme'){buildProg();setTimeout(scrollToCurrent,100);}
+}
+function goToProg(){showTab('programme',document.querySelectorAll('.tab-btn')[1]);setTimeout(scrollToCurrent,100);}
+
+// Countdown
+var OPEN=new Date('2027-02-27T00:00:00');
+function updateCountdown(){
+  var now=new Date();
+  var d=Math.ceil((OPEN-now)/86400000);
+  document.getElementById('days-cd').textContent=d>0?d:'Done!';
+  document.getElementById('today-date').textContent=now.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+}
+
+// Spider chart
+function drawSpider(){
+  var canvas=document.getElementById('spiderCanvas');
+  if(!canvas) return;
+  var ctx=canvas.getContext('2d');
+  var W=canvas.width,H=canvas.height,cx=W/2,cy=H/2;
+  var Rmax=Math.min(W,H)/2-30;
+  var n=SA.length;
+  ctx.clearRect(0,0,W,H);
+
+  // Grid rings
+  for(var r=2;r<=10;r+=2){
+    ctx.beginPath();
+    for(var i=0;i<n;i++){
+      var a=(Math.PI*2*i/n)-Math.PI/2;
+      var rm=Rmax*(r/10);
+      if(i===0) ctx.moveTo(cx+Math.cos(a)*rm,cy+Math.sin(a)*rm);
+      else ctx.lineTo(cx+Math.cos(a)*rm,cy+Math.sin(a)*rm);
+    }
+    ctx.closePath();
+    ctx.strokeStyle=r===10?'rgba(255,255,255,.15)':'rgba(255,255,255,.06)';
+    ctx.lineWidth=1;ctx.stroke();
+  }
+
+  // Axis lines
+  for(var i=0;i<n;i++){
+    var a=(Math.PI*2*i/n)-Math.PI/2;
+    ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx+Math.cos(a)*Rmax,cy+Math.sin(a)*Rmax);
+    ctx.strokeStyle='rgba(255,255,255,.1)';ctx.lineWidth=1;ctx.stroke();
+  }
+
+  // Filled polygon
+  ctx.beginPath();
+  for(var i=0;i<n;i++){
+    var a=(Math.PI*2*i/n)-Math.PI/2;
+    var rm=Rmax*(SA[i].val/10);
+    if(i===0) ctx.moveTo(cx+Math.cos(a)*rm,cy+Math.sin(a)*rm);
+    else ctx.lineTo(cx+Math.cos(a)*rm,cy+Math.sin(a)*rm);
+  }
+  ctx.closePath();
+  ctx.fillStyle='rgba(232,255,71,.13)';ctx.fill();
+  ctx.strokeStyle='rgba(232,255,71,.75)';ctx.lineWidth=2;ctx.stroke();
+
+  // Dots and labels
+  for(var i=0;i<n;i++){
+    var a=(Math.PI*2*i/n)-Math.PI/2;
+    var rm=Rmax*(SA[i].val/10);
+    var dx=cx+Math.cos(a)*rm,dy=cy+Math.sin(a)*rm;
+    ctx.beginPath();ctx.arc(dx,dy,4,0,Math.PI*2);ctx.fillStyle=SA[i].col;ctx.fill();
+    var lx=cx+Math.cos(a)*(Rmax+18),ly=cy+Math.sin(a)*(Rmax+18);
+    ctx.font='bold 9px "DM Mono",monospace';
+    ctx.fillStyle='rgba(255,255,255,.8)';
+    ctx.textAlign=lx>cx+5?'left':lx<cx-5?'right':'center';
+    ctx.textBaseline=ly>cy+5?'top':ly<cy-5?'bottom':'middle';
+    ctx.fillText(SA[i].label.toUpperCase(),lx,ly);
+  }
+
+  // Legend
+  var leg=document.getElementById('spider-legend');
+  if(leg){
+    leg.innerHTML=SA.map(function(ax){
+      return '<div class="legend-item">'
+        +'<div class="legend-dot" style="background:'+ax.col+'"></div>'
+        +'<div class="legend-text"><div class="legend-label">'+ax.label+'</div><div class="legend-sub">'+ax.desc+'</div></div>'
+        +'<div class="legend-val" style="color:'+ax.col+'">'+ax.val.toFixed(1)+'</div>'
+        +'</div>';
+    }).join('');
+  }
+}
+
+// Dashboard
+function updateDashboard(){
+  updateCountdown();
+  var sess=gs(SK);
+  var done=0,total=P.reduce(function(t,w){return t+w.days.length;},0);
+  var wksDone=0;
+  P.forEach(function(wk,wi){
+    var wd=0;
+    wk.days.forEach(function(d,di){if(sess[wi+'_'+di]&&sess[wi+'_'+di].done){done++;wd++;}});
+    if(wd===wk.days.length) wksDone++;
+  });
+  document.getElementById('stat-done').textContent=done;
+  document.getElementById('stat-weeks').textContent=wksDone;
+  var pct=Math.round((done/total)*100);
+  document.getElementById('stat-pct').textContent=pct+'%';
+  document.getElementById('block-bar').style.width=pct+'%';
+  document.getElementById('block-pct-lbl').textContent=pct+'%';
+  var cw=0;
+  for(var wi=0;wi<P.length;wi++){
+    var wd=0;
+    P[wi].days.forEach(function(d,di){if(sess[wi+'_'+di]&&sess[wi+'_'+di].done)wd++;});
+    if(wd<P[wi].days.length){cw=wi;break;}
+    if(wi===P.length-1)cw=wi;
+  }
+  document.getElementById('block-badge').textContent='Wk '+(cw+1)+'/8';
+  var w=P[cw];
+  document.getElementById('tw-title').textContent='Week '+w.wk+' -- '+w.focus;
+  document.getElementById('tw-focus').textContent=w.sub.replace(/&middot;/g,'·').replace(/&mdash;/g,'—');
+  var pills=document.getElementById('tw-pills');
+  pills.innerHTML=w.days.map(function(d,di){
+    var s=sess[cw+'_'+di]||{};
+    var c=s.done?'done':s.missed?'missed':'';
+    var ic=s.done?'✓ ':s.missed?'✗ ':'';
+    return '<span class="day-pill '+c+'">'+ic+d.tl+'</span>';
+  }).join('');
+}
+
+// Programme
+var built=false;
+function buildProg(){
+  if(built){refreshStatus();return;}
+  var sess=gs(SK),ctr=document.getElementById('weeks-container');
+  ctr.innerHTML='';
+  var cw=getCurrent();
+  P.forEach(function(wk,wi){
+    var wd=0;
+    wk.days.forEach(function(d,di){if(sess[wi+'_'+di]&&sess[wi+'_'+di].done)wd++;});
+    var pct=Math.round((wd/wk.days.length)*100);
+    var isCur=(wi===cw),isComp=(wd===wk.days.length);
+    var el=document.createElement('div');
+    el.className='week-block'+(isCur?' current-week':'');
+    el.id='wb-'+wi;
+    el.innerHTML='<div class="week-head" onclick="toggleWk('+wi+')">'
+      +'<div style="display:flex;align-items:center;gap:9px;">'
+      +'<div class="wk-num">WK'+wk.wk+'</div>'
+      +'<div><div class="wk-focus">'+wk.focus+(isCur?' <span class="current-week-badge">NOW</span>':'')+'</div><div class="wk-sub">'+wk.sub+'</div></div>'
+      +'</div>'
+      +'<div style="display:flex;align-items:center;gap:7px;">'
+      +'<div style="text-align:center"><div class="wk-prog-bar"><div class="wk-prog-fill'+(isComp?' full':'')+'" id="pf-'+wi+'" style="width:'+pct+'%"></div></div>'
+      +'<div class="wk-prog-text" id="pt-'+wi+'">'+wd+'/'+wk.days.length+'</div></div>'
+      +'<span class="chevron'+(isCur?' open':'')+'" id="chev-'+wi+'">&#9662;</span>'
+      +'</div></div>'
+      +'<div class="week-body'+(isCur?' open':'')+'" id="wb-body-'+wi+'">'
+      +(wk.deload?'<div class="deload-banner">&#9889; <strong>Deload + Retest Week</strong> &mdash; Scale class intensity to 70%. Max effort on all retests. Export data after Day 2.</div>':'')
+      +wk.days.map(function(d,di){return buildRow(d,wi,di,sess);}).join('')
+      +'</div>';
+    ctr.appendChild(el);
+  });
+  built=true;
+}
+function getCurrent(){
+  var sess=gs(SK),cw=0;
+  for(var wi=0;wi<P.length;wi++){
+    var wd=0;
+    P[wi].days.forEach(function(d,di){if(sess[wi+'_'+di]&&sess[wi+'_'+di].done)wd++;});
+    if(wd<P[wi].days.length){cw=wi;break;}
+    if(wi===P.length-1)cw=wi;
+  }
+  return cw;
+}
+function buildRow(d,wi,di,sess){
+  var key=wi+'_'+di,s=sess[key]||{};
+  var dA=s.done?'active':'',mA=s.missed?'active':'';
+  var rCls=s.done?'done-row':s.missed?'missed-row':'';
+  var tc={class:'tag-class',opengym:'tag-opengym',aerobic:'tag-aerobic',retest:'tag-retest',deload:'tag-deload'}[d.type]||'tag-class';
+  var rpeH='';
+  if(d.rpe&&d.rpe.length){
+    rpeH='<span class="rpe-line">'+d.rpe.map(function(r){
+      var nc=r[0]<=3?'ri-easy':r[0]<=6?'ri-mod':r[0]<=8?'ri-hard':'ri-max';
+      return '<span class="ri '+nc+'">'+r[1]+' RPE <span class="ri-n">'+r[0]+'</span> &mdash; '+r[2]+'</span>';
+    }).join(' &nbsp;')+'</span>';
+  }
+  return '<div class="day-row '+rCls+'" id="dr-'+wi+'-'+di+'">'
+    +'<div class="day-row-head" onclick="toggleDay('+wi+','+di+')">'
+    +'<span class="day-label">'+d.lbl+'</span>'
+    +'<span class="day-type-tag '+tc+'">'+d.tl+'</span>'
+    +'<div class="status-btns" onclick="event.stopPropagation()">'
+    +'<button class="status-btn done-btn '+dA+'" onclick="markDay('+wi+','+di+',\'done\')">&#10003;</button>'
+    +'<button class="status-btn miss-btn '+mA+'" onclick="markDay('+wi+','+di+',\'missed\')">&#10007;</button>'
+    +'</div></div>'
+    +rpeH
+    +'<div class="day-detail" id="dd-'+wi+'-'+di+'">'
+    +'<div class="workout-block"><div class="wb-title">'+d.title+'</div>'+d.body+'</div>'
+    +'<div class="notes-wrap"><label class="notes-label">Session notes</label>'
+    +'<textarea class="session-notes" id="nn-'+wi+'-'+di+'" placeholder="How did it go? What weights? How did you feel?">'+(s.notes||'')+'</textarea>'
+    +'<button class="save-note-btn" onclick="saveNote('+wi+','+di+')">Save Note</button>'
+    +'</div></div></div>';
+}
+function refreshStatus(){
+  var sess=gs(SK);
+  P.forEach(function(wk,wi){
+    var wd=0;
+    wk.days.forEach(function(d,di){
+      if(sess[wi+'_'+di]&&sess[wi+'_'+di].done) wd++;
+      var row=document.getElementById('dr-'+wi+'-'+di);
+      if(row){
+        var s=sess[wi+'_'+di]||{};
+        row.className='day-row'+(s.done?' done-row':s.missed?' missed-row':'');
+        var db=row.querySelector('.done-btn');var mb=row.querySelector('.miss-btn');
+        if(db)db.className='status-btn done-btn'+(s.done?' active':'');
+        if(mb)mb.className='status-btn miss-btn'+(s.missed?' active':'');
+      }
+    });
+    var pct=Math.round((wd/wk.days.length)*100);
+    var pf=document.getElementById('pf-'+wi);var pt=document.getElementById('pt-'+wi);
+    if(pf){pf.style.width=pct+'%';pf.className='wk-prog-fill'+(wd===wk.days.length?' full':'');}
+    if(pt) pt.textContent=wd+'/'+wk.days.length;
+  });
+}
+function toggleWk(wi){
+  var b=document.getElementById('wb-body-'+wi);var c=document.getElementById('chev-'+wi);
+  if(b)b.classList.toggle('open');if(c)c.classList.toggle('open');
+}
+function toggleDay(wi,di){var d=document.getElementById('dd-'+wi+'-'+di);if(d)d.classList.toggle('open');}
+function markDay(wi,di,status){
+  var key=wi+'_'+di,sess=gs(SK),cur=sess[key]||{};
+  if(status==='done') sess[key]={notes:cur.notes||'',done:!cur.done,missed:false};
+  else sess[key]={notes:cur.notes||'',missed:!cur.missed,done:false};
+  ss(SK,sess);refreshStatus();updateDashboard();
+}
+function saveNote(wi,di){
+  var key=wi+'_'+di,sess=gs(SK);
+  var v=document.getElementById('nn-'+wi+'-'+di).value;
+  sess[key]=Object.assign({},sess[key]||{},{notes:v});
+  ss(SK,sess);
+  var btn=event.target;btn.textContent='Saved';btn.style.background='var(--green)';
+  setTimeout(function(){btn.textContent='Save Note';btn.style.background='';},1500);
+}
+function scrollToCurrent(){var el=document.querySelector('.current-week');if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
+
+// Benchmarks
+function renderBenchmarks(){
+  var saved=gs(BK);
+  ['conditioning','lifting','gymnastics'].forEach(function(cat){
+    var el=document.getElementById('bm-'+cat);if(!el)return;
+    el.innerHTML=BM[cat].map(function(b){
+      return '<div class="bm-card">'
+        +'<div class="bm-name">'+b.name+'</div>'
+        +'<div class="bm-target">Target: <span>'+b.target+'</span></div>'
+        +'<input type="text" class="bm-input" id="bm-'+b.id+'" value="'+(saved[b.id]||'')+'" placeholder="'+b.start+'">'
+        +'<div class="bm-start">Baseline: '+b.start+'</div>'
+        +'</div>';
+    }).join('');
+  });
+}
+function saveBenchmarks(){
+  var data={};
+  ['conditioning','lifting','gymnastics'].forEach(function(cat){
+    BM[cat].forEach(function(b){var el=document.getElementById('bm-'+b.id);if(el)data[b.id]=el.value;});
+  });
+  ss(BK,data);
+  var m=document.getElementById('bm-msg');m.style.display='block';
+  setTimeout(function(){m.style.display='none';},2000);
+  drawSpider();
+}
+
+// Log
+function saveLog(){
+  var e={id:Date.now(),date:document.getElementById('t-date').value,week:document.getElementById('t-week').value,type:document.getElementById('t-type').value,score:document.getElementById('t-score').value,feel:document.getElementById('t-feel').value,lift:document.getElementById('t-lift').value,notes:document.getElementById('t-notes').value};
+  if(!e.date){alert('Add a date.');return;}
+  var logs=gl();logs.unshift(e);ss(LK,logs);
+  ['t-score','t-lift','t-notes'].forEach(function(id){document.getElementById(id).value='';});
+  document.getElementById('t-feel').value='';
+  renderLog();
+  var btn=document.querySelector('.submit-btn');btn.textContent='Logged!';btn.style.background='var(--green)';
+  setTimeout(function(){btn.textContent='Log Session';btn.style.background='';},1800);
+}
+function renderLog(){
+  var logs=gl(),el=document.getElementById('log-entries');
+  if(!logs.length){el.innerHTML='<div class="empty-log">NO SESSIONS YET<br>Use the form above to start.</div>';return;}
+  el.innerHTML=logs.map(function(e){
+    return '<div class="log-entry">'
+      +'<button class="le-del" onclick="delLog('+e.id+')">&#10007; Del</button>'
+      +'<div class="le-header"><div class="le-date">'+e.date+(e.week?' &middot; Wk '+e.week:'')+'</div><span class="le-type">'+e.type+'</span></div>'
+      +(e.score?'<div class="le-score">'+e.score+'</div>':'')
+      +(e.lift?'<div class="le-feel">'+e.lift+'</div>':'')
+      +(e.feel?'<div class="le-feel">Energy: '+e.feel+'</div>':'')
+      +(e.notes?'<div class="le-notes">'+e.notes+'</div>':'')
+      +'</div>';
+  }).join('');
+}
+function delLog(id){
+  if(!confirm('Delete this entry?'))return;
+  ss(LK,gl().filter(function(e){return e.id!==id;}));renderLog();
+}
+function exportLog(){
+  var b=new Blob([JSON.stringify(gl(),null,2)],{type:'application/json'});
+  var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='cf2027_b1_log.json';a.click();
+}
+
+// Export for next block
+function exportForCoach(){
+  var sess=gs(SK),bm=gs(BK),logs=gl(),blockData={};
+  P.forEach(function(wk,wi){
+    var label='Week '+wk.wk+': '+wk.focus;
+    blockData[label]={};
+    wk.days.forEach(function(d,di){
+      var key=wi+'_'+di,s=sess[key]||{};
+      blockData[label][d.lbl.replace(/&mdash;/g,'--').replace(/&nbsp;/g,' ')]={
+        status:s.done?'done':s.missed?'missed':'not logged',
+        notes:s.notes||''
+      };
+    });
+  });
+  var out={
+    exportDate:new Date().toISOString(),
+    block:'Block 1 - Foundation (8 weeks)',
+    athleteProfile:{age:33,weight:'84kg',startPercentile:'72nd (top 28%)',target:'90th (top 10%)'},
+    spiderScores:SA.reduce(function(o,a){o[a.key]=a.val;return o;},{}),
+    blockCompletion:blockData,
+    benchmarks:bm,
+    sessionNotes:logs,
+    coachNote:'Please review Block 1 data and generate Block 2 programming based on actual progress. Key questions: Which benchmarks improved most? What still needs targeted work? How did the aerobic sessions feel by Week 7-8 vs Week 1-2?'
+  };
+  var b=new Blob([JSON.stringify(out,null,2)],{type:'application/json'});
+  var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='cf2027_block1_export.json';a.click();
+}
+
+// Init
+updateCountdown();
+updateDashboard();
+drawSpider();
+setInterval(updateCountdown,60000);
+document.getElementById('t-date').valueAsDate=new Date();
+</script>
+</body>
+</html>
